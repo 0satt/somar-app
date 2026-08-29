@@ -1,5 +1,10 @@
 # somar-app
 
+Instruções para Teste Rápido
+Abra o arquivo app.html em qualquer navegador web moderno.
+
+Na tela de login, insira qualquer e-mail e senha fictícios (Ex: ms2@gmail.com e 1234).
+
 app.html (Estrutura e Conteúdo)
 
 Centraliza as visões/telas da aplicação através de containers do tipo .page.
