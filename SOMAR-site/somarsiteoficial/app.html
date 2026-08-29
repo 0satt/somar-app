@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <base target="_self" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOMAR — Conectando Pessoas a Causas Sociais</title>
+    <meta
+      name="description"
+      content="SOMAR é uma plataforma que conecta pessoas a ONGs, projetos sociais e oportunidades de voluntariado. Encontre causas, doe, agende visitas e transforme vidas."
+    />
+    <meta
+      property="og:title"
+      content="SOMAR — Conectando Pessoas a Causas Sociais"
+    />
+    <meta
+      property="og:description"
+      content="Encontre ONGs, trabalhos voluntários e faça doações. Descubra causas sociais compatíveis com seu perfil."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://somar.app" />
+    <meta
+      property="og:image"
+      content="https://picsum.photos/1200/630?random=1"
+    />
+    <meta name="theme-color" content="#6C3FA4" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236C3FA4'/%3E%3Ctext x='16' y='22' font-size='18' font-weight='bold' fill='white' text-anchor='middle' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+    />
+
+    <!-- CSS Externos -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CSS Próprio do Projeto -->
+    <link rel="stylesheet" href="stylesapp.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link" id="skipLink"
+      >Pular para o conteúdo principal</a
+    >
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" role="status" aria-label="Carregando SOMAR">
+      <div class="splash-logo" aria-hidden="true">
+        <!-- Imagem da logo -->
+        <img
+          src="images/logo.png"
+          alt="Logo SOMAR"
+          style="max-height: 100px; width: auto"
+        />
+      </div>
+      <p class="splash-sub">Conectando pessoas a causas</p>
+      <div class="splash-loader" aria-hidden="true"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div
+      id="loadingOverlay"
+      class="loading-overlay"
+      style="display: none"
+      role="alert"
+      aria-live="assertive"
+    >
+      <div class="spinner" aria-hidden="true"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div
+      class="toast-container position-fixed bottom-0 end-0 p-3"
+      id="toastContainer"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg bg-white shadow-sm sticky-top"
+      id="mainNav"
+      role="navigation"
+      aria-label="Navegação principal"
+    >
+      <div class="container">
+        <!-- Logo -->
+        <a
+          class="navbar-brand d-flex align-items-center gap-2"
+          href="#"
+          data-page="dashboard"
+          aria-label="SOMAR - Página inicial"
+        >
+          <!-- Texto substituído pela imagem da logo -->
+          <img
+            src="images/logo.png"
+            alt="Logo SOMAR"
+            style="height: 45px; width: auto; border-radius: 8px"
+          />
+        </a>
+
+        <!-- O data-bs-target (DEVE) ser exatamente o ID da div abaixo -->
+        <button
+          class="navbar-toggler border-0 focus-visible"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Abrir menu de navegação"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- A (Conteúdo Colapsável) -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <!-- Lista de links dinâmicos do JS -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navList"></ul>
+
+          <!-- Área Botões à direita -->
+          <div class="d-flex align-items-center gap-2 flex-wrap mt-3 mt-lg-0">
+            <!-- O SEU NOVO BOTÃO ESPECIAL -->
+            <a
+              href="index.html"
+              class="btn text-white fw-semibold me-lg-3"
+              style="
+                background-color: #26b7b8;
+                border: 2px solid #26b7b8;
+                border-radius: 8px;
+                transition: all 0.3s;
+              "
+            >
+              <i class="bi bi-box-arrow-left me-1"></i> Voltar para site
+            </a>
+
+            <!-- Botões originais da plataforma -->
+            <button
+              class="btn btn-sm btn-outline-secondary rounded-pill"
+              id="langToggle"
+              aria-label="Alternar idioma"
+              title="Idioma"
+            >
+              <i class="bi bi-globe2"></i> <span id="langLabel">PT</span>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary rounded-pill"
+              id="darkToggle"
+              aria-label="Alternar modo escuro"
+              title="Modo escuro"
+            >
+              <i class="bi bi-moon-stars" id="darkIcon"></i>
+            </button>
+
+            <div class="dropdown" id="notifDropdown">
+              <button
+                class="btn btn-sm btn-outline-secondary rounded-pill position-relative"
+                id="notifBtn"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                aria-label="Notificações"
+                title="Notificações"
+              >
+                <i class="bi bi-bell"></i>
+                <span
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  id="notifBadge"
+                  style="font-size: 0.6rem"
+                  >0</span
+                >
+              </button>
+              <ul
+                class="dropdown-menu dropdown-menu-end shadow"
+                id="notifList"
+                style="max-width: 320px; width: 100%"
+                aria-label="Lista de notificações"
+              >
+                <li class="dropdown-item-text text-muted text-center">
+                  Nenhuma notificação
+                </li>
+              </ul>
+            </div>
+
+            <button
+              class="btn btn-sm btn-outline-secondary rounded-pill"
+              id="profileBtn"
+              data-page="profile"
+              aria-label="Meu perfil"
+              title="Meu perfil"
+            >
+              <i class="bi bi-person-circle"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger rounded-pill"
+              id="logoutBtn"
+              aria-label="Sair"
+            >
+              <i class="bi bi-box-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Área Principal de Conteúdo -->
+    <main id="main-content">
+      <div class="container py-4">
+        <!-- PAGE: Login -->
+        <div class="page" id="page-login">
+          <div
+            class="row justify-content-center min-vh-75 align-items-center"
+            style="min-height: 70vh"
+          >
+            <div class="col-11 col-sm-10 col-md-6 col-lg-5 col-xl-4">
+              <div class="text-center mb-4">
+                <div
+                  style="
+                    font-size: 3rem;
+                    font-weight: 700;
+                    color: var(--primary);
+                  "
+                >
+                  SOMAR
+                </div>
+                <p class="text-muted">Conectando pessoas a causas sociais</p>
+              </div>
+              <div class="card shadow-soft p-4">
+                <h2 class="h5 mb-3 text-center">Entrar</h2>
+                <form
+                  id="loginForm"
+                  novalidate
+                  aria-label="Formulário de login"
+                >
+                  <div class="mb-3">
+                    <label for="loginEmail" class="form-label">E-mail</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="loginEmail"
+                      placeholder="seu@email.com"
+                      required
+                      aria-required="true"
+                      autocomplete="email"
+                    />
+                    <div class="invalid-feedback">
+                      Informe um e-mail válido.
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="loginPassword" class="form-label">Senha</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="loginPassword"
+                      placeholder="••••••••"
+                      required
+                      minlength="4"
+                      aria-required="true"
+                      autocomplete="current-password"
+                    />
+                    <div class="invalid-feedback">
+                      Senha deve ter ao menos 4 caracteres.
+                    </div>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-3"
+                  >
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="rememberMe"
+                      />
+                      <label class="form-check-label" for="rememberMe"
+                        >Lembrar</label
+                      >
+                    </div>
+                    <a
+                      href="#"
+                      class="text-decoration-none small"
+                      style="color: var(--primary)"
+                      id="forgotPwd"
+                      >Esqueci a senha</a
+                    >
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary w-100 btn-ripple"
+                  >
+                    Entrar
+                  </button>
+                </form>
+                <hr class="my-3" />
+                <p class="text-center text-muted small mb-0">
+                  Não tem conta?
+                  <a
+                    href="#"
+                    class="text-decoration-none fw-semibold"
+                    style="color: var(--primary)"
+                    id="goToRegister"
+                    >Cadastre-se</a
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Register -->
+        <div class="page" id="page-register">
+          <div
+            class="row justify-content-center min-vh-75 align-items-center"
+            style="min-height: 70vh"
+          >
+            <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+              <div class="text-center mb-4">
+                <div
+                  style="
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    color: var(--primary);
+                  "
+                >
+                  SOMAR
+                </div>
+                <p class="text-muted">
+                  Crie sua conta e comece a transformar vidas
+                </p>
+              </div>
+              <div class="card shadow-soft p-4">
+                <h2 class="h5 mb-3 text-center">Cadastro</h2>
+                <form
+                  id="registerForm"
+                  novalidate
+                  aria-label="Formulário de cadastro"
+                >
+                  <div class="row g-3">
+                    <div class="col-12">
+                      <label for="regName" class="form-label"
+                        >Nome completo</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="regName"
+                        placeholder="Seu nome"
+                        required
+                        aria-required="true"
+                        autocomplete="name"
+                      />
+                      <div class="invalid-feedback">Informe seu nome.</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="regEmail" class="form-label">E-mail</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="regEmail"
+                        placeholder="seu@email.com"
+                        required
+                        aria-required="true"
+                        autocomplete="email"
+                      />
+                      <div class="invalid-feedback">
+                        Informe um e-mail válido.
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="regPhone" class="form-label">Telefone</label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        id="regPhone"
+                        placeholder="(11) 99999-9999"
+                        autocomplete="tel"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="regPassword" class="form-label">Senha</label>
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="regPassword"
+                        placeholder="Mínimo 4 caracteres"
+                        required
+                        minlength="4"
+                        aria-required="true"
+                        autocomplete="new-password"
+                      />
+                      <div class="invalid-feedback">Mínimo 4 caracteres.</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="regConfirm" class="form-label"
+                        >Confirmar senha</label
+                      >
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="regConfirm"
+                        placeholder="Repita a senha"
+                        required
+                        aria-required="true"
+                        autocomplete="new-password"
+                      />
+                      <div class="invalid-feedback">
+                        As senhas devem coincidir.
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="regTerms"
+                          required
+                        />
+                        <label class="form-check-label small" for="regTerms"
+                          >Aceito os
+                          <a
+                            href="#"
+                            class="text-decoration-none"
+                            style="color: var(--primary)"
+                            >Termos de Uso</a
+                          >
+                          e
+                          <a
+                            href="#"
+                            class="text-decoration-none"
+                            style="color: var(--primary)"
+                            >Política de Privacidade</a
+                          ></label
+                        >
+                        <div class="invalid-feedback">
+                          Você precisa aceitar os termos.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary w-100 mt-3 btn-ripple"
+                  >
+                    Criar conta
+                  </button>
+                </form>
+                <hr class="my-3" />
+                <p class="text-center text-muted small mb-0">
+                  Já tem conta?
+                  <a
+                    href="#"
+                    class="text-decoration-none fw-semibold"
+                    style="color: var(--primary)"
+                    id="goToLogin"
+                    >Faça login</a
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Quiz -->
+        <div class="page" id="page-quiz">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+              <div class="text-center mb-4">
+                <h1 class="h4" style="color: var(--primary)">
+                  Descubra suas causas
+                </h1>
+                <p class="text-muted">
+                  Responda rapidamente para encontrar ONGs ideais para você
+                </p>
+              </div>
+              <div
+                class="progress-steps"
+                id="quizSteps"
+                role="progressbar"
+                aria-valuenow="1"
+                aria-valuemin="1"
+                aria-valuemax="5"
+              ></div>
+              <div class="card shadow-soft p-4" id="quizCard">
+                <div id="quizContent"></div>
+                <div class="d-flex justify-content-between mt-4">
+                  <button
+                    class="btn btn-outline-secondary btn-ripple"
+                    id="quizPrev"
+                    disabled
+                  >
+                    Anterior
+                  </button>
+                  <button class="btn btn-primary btn-ripple" id="quizNext">
+                    Próximo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Dashboard -->
+        <div class="page" id="page-dashboard">
+          <div class="row g-4">
+            <div class="col-12">
+              <div class="card hero-gradient p-4 border-0">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    <h2 class="h4 mb-1" id="dashGreeting">
+                      Olá, <span id="dashUserName">Usuário</span>!
+                    </h2>
+                    <p class="mb-0 opacity-75" id="dashSubtext">
+                      Explore causas sociais e encontre oportunidades perto de
+                      você.
+                    </p>
+                  </div>
+                  <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <span
+                      class="badge bg-white text-dark rounded-pill px-3 py-2"
+                      ><i class="bi bi-star-fill text-warning me-1"></i>
+                      <span id="dashPoints">0</span> pontos</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Métricas -->
+            <div class="col-6 col-md-3" id="statVolunt">
+              <div class="card p-3 text-center shadow-soft">
+                <i class="bi bi-people fs-2" style="color: var(--primary)"></i>
+                <h3 class="h5 mt-2 mb-0" id="statVoluntCount">0</h3>
+                <small class="text-muted">Voluntariados</small>
+              </div>
+            </div>
+            <div class="col-6 col-md-3" id="statDonation">
+              <div class="card p-3 text-center shadow-soft">
+                <i class="bi bi-gift fs-2" style="color: var(--secondary)"></i>
+                <h3 class="h5 mt-2 mb-0" id="statDonationCount">0</h3>
+                <small class="text-muted">Doações</small>
+              </div>
+            </div>
+            <div class="col-6 col-md-3" id="statFav">
+              <div class="card p-3 text-center shadow-soft">
+                <i class="bi bi-heart fs-2" style="color: #e74c3c"></i>
+                <h3 class="h5 mt-2 mb-0" id="statFavCount">0</h3>
+                <small class="text-muted">Favoritas</small>
+              </div>
+            </div>
+            <div class="col-6 col-md-3" id="statVisits">
+              <div class="card p-3 text-center shadow-soft">
+                <i
+                  class="bi bi-calendar-check fs-2"
+                  style="color: var(--accent)"
+                ></i>
+                <h3 class="h5 mt-2 mb-0" id="statVisitCount">0</h3>
+                <small class="text-muted">Visitas</small>
+              </div>
+            </div>
+
+            <!-- Busca & Filtros (quebrei em várias seguimentacoes, quem for mexer nisso, lembre-se de verifica-las. ) -->
+            <div class="col-12">
+              <div class="card shadow-soft p-3">
+                <div class="row g-2 align-items-center">
+                  <div class="col-12 col-md-5 position-relative">
+                    <div class="input-group">
+                      <span class="input-group-text bg-transparent border-end-0"
+                        ><i class="bi bi-search"></i
+                      ></span>
+                      <input
+                        type="text"
+                        class="form-control border-start-0"
+                        id="searchInput"
+                        placeholder="Buscar ONGs, causas ou projetos..."
+                        aria-label="Buscar ONGs"
+                      />
+                    </div>
+                    <div
+                      class="suggestions-box d-none"
+                      id="suggestionsBox"
+                    ></div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <select
+                      class="form-select"
+                      id="filterCategory"
+                      aria-label="Filtrar por causa"
+                    >
+                      <option value="">Todas as causas</option>
+                    </select>
+                  </div>
+                  <div class="col-6 col-md-2">
+                    <select
+                      class="form-select"
+                      id="filterCity"
+                      aria-label="Filtrar por cidade"
+                    >
+                      <option value="">Todas as cidades</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-2">
+                    <button
+                      class="btn btn-primary w-100 btn-ripple"
+                      id="searchBtn"
+                    >
+                      <i class="bi bi-funnel"></i> Filtrar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ONGs Grid -->
+            <div class="col-12">
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <h3 class="h5 mb-0">
+                  <i
+                    class="bi bi-building me-2"
+                    style="color: var(--primary)"
+                  ></i
+                  >ONGs Recomendadas
+                </h3>
+                <div class="d-flex gap-2">
+                  <button
+                    class="btn btn-sm btn-outline-primary rounded-pill"
+                    id="viewFavorites"
+                  >
+                    <i class="bi bi-heart"></i> Favoritas
+                  </button>
+                </div>
+              </div>
+              <div class="row g-3" id="ngoGrid">
+                <div class="col-12 text-center py-5">
+                  <div
+                    class="skeleton"
+                    style="height: 200px; width: 100%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: NGO Detail -->
+        <div class="page" id="page-ngo-detail">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+              <button
+                class="btn btn-sm btn-outline-secondary rounded-pill mb-3"
+                id="ngoBackBtn"
+              >
+                <i class="bi bi-arrow-left"></i> Voltar
+              </button>
+              <div id="ngoDetailContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Scheduling -->
+        <div class="page" id="page-schedule">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+              <button
+                class="btn btn-sm btn-outline-secondary rounded-pill mb-3"
+                id="scheduleBackBtn"
+              >
+                <i class="bi bi-arrow-left"></i> Voltar
+              </button>
+              <div id="scheduleContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Donation(PIX) -->
+        <div class="page" id="page-donation">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-7">
+              <button
+                class="btn btn-sm btn-outline-secondary rounded-pill mb-3"
+                id="donationBackBtn"
+              >
+                <i class="bi bi-arrow-left"></i> Voltar
+              </button>
+              <div id="donationContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Confirmation -->
+        <div class="page" id="page-confirmation">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-5 text-center">
+              <div id="confirmationContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Profile -->
+        <div class="page" id="page-profile">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <h2 class="h4 mb-4">
+                <i
+                  class="bi bi-person-circle me-2"
+                  style="color: var(--primary)"
+                ></i
+                >Meu Perfil
+              </h2>
+              <div id="profileContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: About(o meio do codigo estava quebrando com o JS, mexi na estrutura da classe, so para avisar. nao sei como esta funcionando. nao mexer !!!!  ) -->
+        <div class="page" id="page-about">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 text-center">
+              <h2 class="h4" style="color: var(--primary)">Sobre o SOMAR</h2>
+              <p class="text-muted">
+                Somos uma plataforma que conecta pessoas a causas sociais,
+                facilitando o voluntariado, doações e o engajamento comunitário.
+              </p>
+              <div class="row g-3 mt-3">
+                <div class="col-6">
+                  <div class="card p-3 shadow-soft">
+                    <i
+                      class="bi bi-people fs-2"
+                      style="color: var(--primary)"
+                    ></i>
+                    <h5 class="h6 mt-2">+5.000</h5>
+                    <small class="text-muted">Voluntários</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="card p-3 shadow-soft">
+                    <i
+                      class="bi bi-building fs-2"
+                      style="color: var(--secondary)"
+                    ></i>
+                    <h5 class="h6 mt-2">+200</h5>
+                    <small class="text-muted">ONGs</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="card p-3 shadow-soft">
+                    <i class="bi bi-gift fs-2" style="color: var(--accent)"></i>
+                    <h5 class="h6 mt-2">+R$ 2M</h5>
+                    <small class="text-muted">Em doações</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="card p-3 shadow-soft">
+                    <i
+                      class="bi bi-calendar-heart fs-2"
+                      style="color: #e74c3c"
+                    ></i>
+                    <h5 class="h6 mt-2">+1.200</h5>
+                    <small class="text-muted">Ações</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer
+      class="bg-white border-top mt-5 py-4"
+      id="mainFooter"
+      role="contentinfo"
+    >
+      <div class="container">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <span style="font-weight: 700; color: var(--primary)">SOMAR</span>
+            <small class="text-muted d-block"
+              >© 2025 SOMAR Plataforma Social. Todos os direitos
+              reservados.</small
+            >
+          </div>
+          <div class="col-md-6 text-md-end">
+            <a
+              href="#"
+              class="text-decoration-none text-muted me-3"
+              data-page="about"
+              >Sobre</a
+            >
+            <a href="#" class="text-decoration-none text-muted me-3"
+              >Privacidade</a
+            >
+            <a href="#" class="text-decoration-none text-muted">Termos</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts Externos + Aplicação (Otimizado no final da página) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

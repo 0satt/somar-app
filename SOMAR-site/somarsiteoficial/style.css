@@ -1,0 +1,290 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #fff5e6;
+}
+/*inicio cabecaho*/
+.logo{
+    border-radius: 16px;
+
+}
+header {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 10%;
+    z-index: 1000;
+    transition: 0.3s;
+}
+
+/* Cor padrão (início) */
+header .nav-link {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+/* Quando rolar */
+header.scrolled {
+    background: white;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+header.scrolled .nav-link {
+    color: #333;
+}
+
+
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('images/somar.jpeg');
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 12px 50px;
+    background: #00c896;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+}
+/*fim cabecalho*/
+
+/*inicio sobre nos*/
+.sobre-timeline {
+    background: #d8e6dc;
+    padding: 100px 10%;
+    position: relative;
+}
+
+.titulo-sobre {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 60px;
+}
+
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: #8aa89b;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+}
+
+.container {
+    padding: 20px 40px;
+    position: relative;
+    width: 50%;
+}
+
+.container.left {
+    left: 0;
+}
+
+.container.right {
+    left: 50%;
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    right: -9px;
+    background-color: white;
+    border: 4px solid #ff4f87;
+    top: 30px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.container.right::after {
+    left: -9px;
+}
+
+.content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.content h3 {
+    margin-bottom: 15px;
+    color: #ff4f87;
+}
+
+.content ul {
+    padding-left: 20px;
+}
+
+.content li {
+    margin-bottom: 8px;
+}
+
+/*fim da area sobre nos*/
+
+
+
+.sobre, .ongs, .login {
+    padding: 100px 10%;
+}
+
+/*inicio das ongs*/
+.ongs-section {
+    padding: 100px 10%;
+    background: #ffffff;
+    text-align: center;
+}
+
+.titulo-ongs {
+    font-size: 36px;
+    margin-bottom: 60px;
+}
+
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.ong-card {
+    min-width: 340px;
+    margin: 0 10px;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 20px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.ong-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.ong-img {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px auto;
+    border-radius: 50%;
+    border: 6px solid #c6d948;
+    overflow: hidden;
+    background: white;
+}
+
+.ong-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ong-card h3 {
+    margin-bottom: 15px;
+    color: #ff4f87;
+}
+
+.ong-card p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    background: #ff4f87;
+    border: none;
+    color: white;
+    font-size: 22px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.carousel-btn.prev {
+    left: 0;
+}
+
+.carousel-btn.next {
+    right: 0;
+}
+
+.prev, .next {
+    position: absolute;
+    top: 40%;
+    background: #ff4f87;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.prev { left: 0; }
+.next { right: 0; }
+
+/*fim das ongs*/
+/*login  cadastro*/
+.form-container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+.login h2{
+    text-align: center;
+}
+.form-box {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    width: 300px;
+
+}
+
+.form-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+footer{
+    text-align: center;
+}

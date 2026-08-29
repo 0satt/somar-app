@@ -1,0 +1,25 @@
+quando for logar nao precisa criar uma conta real, coloque qualquer email ( exemplo: ms2@gmail.com) senha (ex : 1234)
+
+1. app.html : 
+- É a estrutura principal da interface da aplicação.
+- Define os elementos visuais da página, como cabeçalho, navegação, seções, formulários, cards, botões e blocos de conteúdo.
+- Organiza a layout geral da aplicação e conecta os componentes visuais com os scripts e estilos.
+- Em aplicações web, normalmente contém o conteúdo que o usuário vê e os pontos de integração com JavaScript.
+
+2. app.js : 
+- É o arquivo responsável pela lógica e interatividade da aplicação.
+- Controla eventos, ações do usuário, manipulação do DOM e comunicação com APIs ou dados externos.
+- Pode incluir funções para abrir/fechar menus, validar formulários, renderizar conteúdo dinâmico e atualizar a interface em tempo real.
+- Centraliza a inteligência da aplicação, deixando o HTML responsável pela estrutura e o CSS pela aparência.
+
+3. styleapp.css : 
+- É o arquivo de estilo da aplicação.
+- Define cores (deixei organizado no root.), fontes, espaçamentos, tamanhos, responsividade, bordas, sombras e posicionamento dos elementos.
+- Mantém a interface visual consistente e profissional.
+- Permite adaptar a página para diferentes tamanhos de tela, melhorando a experiência em desktop, tablet e mobile.
+
+Resumo : 
+- app.html = estrutura e conteúdo da página.
+- app.js = comportamento e interação da aplicação.
+- styleapp.css = visual e design da interface.
+
